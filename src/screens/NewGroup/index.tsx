@@ -19,7 +19,7 @@ export function NewGroup() {
         />
 
         <Box height={132}>
-          <Input />
+          <Input placeholder="Nome da turma" />
           <Button title="Criar" />
         </Box>
       </Content>
