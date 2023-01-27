@@ -1,16 +1,21 @@
+import { useState } from "react";
+import { FlatList } from "react-native";
+
 import { ButtonIcon } from "@components/ButtonIcon";
 import { Filter } from "@components/Filter";
 import { Header } from "@components/Header";
 import { Highlight } from "@components/Hightlight";
 import { Input } from "@components/Input";
-import { useState } from "react";
-import { FlatList } from "react-native";
+import { PlayerCard } from "@components/PlayerCard";
 
 import { Container, Form, HeaderList, NumbersOfPlayers } from "./styles";
 
 export function Players() {
   const [selectedTeam, setSelectedTeam] = useState<string>("");
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<string[]>([
+    "Anderson Nascimento",
+    "Yanni Teixeira",
+  ]);
 
   function handleSelectTeam(teamName: string) {
     setSelectedTeam(teamName);
@@ -43,9 +48,16 @@ export function Players() {
           )}
           horizontal
         />
-
         <NumbersOfPlayers>{players.length}</NumbersOfPlayers>
       </HeaderList>
+
+      <FlatList
+        data={players}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <PlayerCard name={item} onRemove={() => {}} />
+        )}
+      />
     </Container>
   );
 }
