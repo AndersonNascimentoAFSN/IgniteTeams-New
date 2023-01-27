@@ -4,7 +4,7 @@ import { Container, Icon, Name } from "./styles";
 
 type PlayerCardProps = {
   name: string;
-  onRemove: () => void;
+  onRemove: (name: string) => void;
 };
 
 export function PlayerCard({ name, onRemove }: PlayerCardProps) {
@@ -13,7 +13,7 @@ export function PlayerCard({ name, onRemove }: PlayerCardProps) {
       <Icon name="person" />
       <Name>{name}</Name>
 
-      <ButtonIcon icon="close" type="SECONDARY" onPress={onRemove}/>
+      <ButtonIcon icon="close" type="SECONDARY" onPress={() => onRemove(name)}/>
     </Container>
   );
 }

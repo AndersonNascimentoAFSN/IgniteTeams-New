@@ -7,18 +7,34 @@ import { Header } from "@components/Header";
 import { Highlight } from "@components/Hightlight";
 import { Input } from "@components/Input";
 import { PlayerCard } from "@components/PlayerCard";
+import { Button } from "@components/Button";
+import { ListEmpty } from "@components/ListEmpty";
 
 import { Container, Form, HeaderList, NumbersOfPlayers } from "./styles";
 
 export function Players() {
+  const [player, setPlayer] = useState("");
+  const [players, setPlayers] = useState<string[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<string>("");
-  const [players, setPlayers] = useState<string[]>([
-    "Anderson Nascimento",
-    "Yanni Teixeira",
-  ]);
+
+  function handleAddPlayer() {
+    const playerAlreadyAdded = players.find(
+      (playerName) => playerName === player
+    );
+
+    if (playerAlreadyAdded) return;
+
+    setPlayers((players) => [player, ...players]);
+
+    setPlayer("")
+  }
 
   function handleSelectTeam(teamName: string) {
     setSelectedTeam(teamName);
+  }
+
+  function handleRemovePlayer(playerName: string) {
+    setPlayers((players) => players.filter((player) => player !== playerName));
   }
 
   return (
@@ -31,8 +47,13 @@ export function Players() {
       />
 
       <Form>
-        <Input placeholder="Nome da pessoa" autoCorrect={false} />
-        <ButtonIcon icon="add" />
+        <Input
+          placeholder="Nome da pessoa"
+          autoCorrect={false}
+          value={player}
+          onChangeText={(text) => setPlayer(text)}
+        />
+        <ButtonIcon icon="add" onPress={handleAddPlayer} />
       </Form>
 
       <HeaderList>
@@ -55,9 +76,19 @@ export function Players() {
         data={players}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <PlayerCard name={item} onRemove={() => {}} />
+          <PlayerCard name={item} onRemove={handleRemovePlayer} />
         )}
+        ListEmptyComponent={() => (
+          <ListEmpty message="Não há pessoas nesse time." />
+        )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          { paddingBottom: 100 },
+          players.length === 0 && { flex: 1 },
+        ]}
       />
+
+      <Button title="Remover turma" type="SECONDARY" />
     </Container>
   );
 }
