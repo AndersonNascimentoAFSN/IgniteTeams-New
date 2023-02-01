@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { Box } from "@components/Box";
@@ -8,10 +9,16 @@ import { Input } from "@components/Input";
 import { Container, Content, Icon } from "./styles";
 
 export function NewGroup() {
+  const [group, setGroup] = useState("");
+
   const navigate = useNavigation();
 
+  function handleChangeGroup(groupName: string) {
+    setGroup(groupName);
+  }
+
   function handlePlayers() {
-    navigate.navigate("players", { group: "Rocket" });
+    navigate.navigate("players", { group });
   }
 
   return (
@@ -27,7 +34,10 @@ export function NewGroup() {
         />
 
         <Box height={132}>
-          <Input placeholder="Nome da turma" />
+          <Input
+            placeholder="Nome da turma"
+            onChangeText={(groupName) => handleChangeGroup(groupName)}
+          />
           <Button title="Criar" onPress={handlePlayers} />
         </Box>
       </Content>
