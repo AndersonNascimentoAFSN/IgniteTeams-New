@@ -7,6 +7,7 @@ import { Header } from "@components/Header";
 import { Highlight } from "@components/Hightlight";
 import { Input } from "@components/Input";
 import { Container, Content, Icon } from "./styles";
+import { groupCreate } from "@storage/group/groupCreate";
 
 export function NewGroup() {
   const [group, setGroup] = useState("");
@@ -17,8 +18,13 @@ export function NewGroup() {
     setGroup(groupName);
   }
 
-  function handlePlayers() {
-    navigate.navigate("players", { group });
+  async function handlePlayers() {
+    try {
+      await groupCreate(group);
+      navigate.navigate("players", { group });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
