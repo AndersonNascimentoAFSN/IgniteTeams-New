@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FlatList } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 import { ButtonIcon } from "@components/ButtonIcon";
 import { Filter } from "@components/Filter";
@@ -12,6 +12,7 @@ import { Button } from "@components/Button";
 import { ListEmpty } from "@components/ListEmpty";
 
 import { Container, Form, HeaderList, NumbersOfPlayers } from "./styles";
+import { groupRemove } from "@storage/group/groupRemove";
 
 type RouteParams = {
   group: string;
@@ -25,6 +26,8 @@ export function Players() {
   const route = useRoute();
 
   const { group } = route.params as RouteParams;
+
+  const { navigate } = useNavigation();
 
   function handleAddPlayer() {
     const playerAlreadyAdded = players.find(
@@ -44,6 +47,11 @@ export function Players() {
 
   function handleRemovePlayer(playerName: string) {
     setPlayers((players) => players.filter((player) => player !== playerName));
+  }
+
+  async function handleRemoveGroup(groupName: string) {
+    await groupRemove(groupName);
+    navigate("groups");
   }
 
   return (
@@ -94,7 +102,11 @@ export function Players() {
         ]}
       />
 
-      <Button title="Remover turma" type="SECONDARY" />
+      <Button
+        title="Remover turma"
+        type="SECONDARY"
+        onPress={() => handleRemoveGroup(group)}
+      />
     </Container>
   );
 }
